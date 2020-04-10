@@ -1,0 +1,27 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "A Task and Notes Manager ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prachijustin/Task-Manager-Assignment.git"
+  },
+  "keywords": [
+    "Task",
+    "Notes"
+  ],
+  "author": "Prachi Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prachijustin/Task-Manager-Assignment/issues"
+  },
+  "homepage": "https://github.com/prachijustin/Task-Manager-Assignment#readme",
+  "dependencies": {
+    "sequelize": "^5.21.6",
+    "sqlite3": "^4.1.1"
+  }
+}
