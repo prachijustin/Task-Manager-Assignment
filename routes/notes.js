@@ -1,10 +1,10 @@
 const route = require('express').Router()
-const notesUtils = require('./utils/notesUtils')
+const notes = require('../controllers/notes')
 
-route.get('/', notesUtils.getAllNotes)
+route.get('/', notes.getAllNotes)
 
-route.get('/:id', notesUtils.getNoteByID)
+route.get('/:id', notes.getNoteById)
 
-route.delete('/', notesUtils.deleteAllNotes)
+route.delete('/', notes.deleteAllNotes)
 
 exports = module.exports = route

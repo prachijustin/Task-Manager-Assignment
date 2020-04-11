@@ -5,6 +5,7 @@ const db = new Sequelize({
     storage: __dirname + '/task-manager.db',
 })
 
+
 const Tasks = db.define('Task', {
     taskID: {
         type: Sequelize.INTEGER,

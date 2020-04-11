@@ -1,41 +1,41 @@
 const route = require('express').Router()
-const tasksUtils = require('./utils/tasksUtils')
-const notesUtils = require('./utils/notesUtils')
+const tasks = require('../controllers/tasks')
+const notes = require('../controllers/notes')
 
-route.get('/', tasksUtils.getAllTasks)
-
-
-route.post('/', tasksUtils.createNewTask)
+route.get('/', tasks.getAllTasks)
 
 
-route.get('/:id', tasksUtils.getTaskByID)
+route.post('/', tasks.createTask)
 
 
-route.get('/:id/notes', notesUtils.getNoteByTaskID)
+route.get('/:id', tasks.getTaskById)
 
 
-route.post('/:id/notes', notesUtils.createNewNote)
+route.get('/:id/notes', notes.getNoteByTaskId)
 
 
-route.delete('/:id/notes', notesUtils.deleteAllNotesByTaskID)
+route.post('/:id/notes', notes.createNote)
 
 
-route.patch('/:id', tasksUtils.updateTaskByID)
+route.delete('/:id/notes', notes.deleteNotesByTaskId)
 
 
-route.delete('/:id', tasksUtils.deleteTaskByID)
+route.patch('/:id', tasks.updateTaskById)
 
 
-route.get('/:taskID/notes/:id', notesUtils.getNoteByIDByTaskID)
+route.delete('/:id', tasks.deleteTaskById)
 
 
-route.delete('/:taskID/notes/:id', notesUtils.deleteNoteByIDByTaskID)
+route.get('/:taskID/notes/:id', notes.getNoteByIdByTaskId)
 
 
-route.patch('/:taskID/notes/:id', notesUtils.updateNoteByIDByTaskID)
+route.delete('/:taskID/notes/:id', notes.deleteNoteByIdByTaskId)
 
 
-route.delete('/', tasksUtils.deleteAllTasks)
+route.patch('/:taskID/notes/:id', notes.updateNoteByIdByTaskId)
+
+
+route.delete('/', tasks.deleteAllTasks)
 
 
 exports = module.exports = route
