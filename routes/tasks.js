@@ -1,6 +1,6 @@
 const Tasks = require('../db').Tasks
 const Notes = require('../db').Notes
-
+const { Op } = require('sequelize')
 const route = require('express').Router()
 
 route.get('/', async (req, res) => {
@@ -104,6 +104,79 @@ route.delete('/:id', async(req, res) => {
     }
     else
         res.status(404).send(`Task with Task ID ${req.params.id} not found.`)
+})
+
+
+route.get('/:id/notes/:noteID', async (req, res) => {
+    if(isNaN(parseInt(req.params.id)) || isNaN(parseInt(req.params.noteID))){
+        res.status(500).send('ID should be a number')
+    }
+
+    const note = await Notes.findOne({where: {
+        [Op.and]: [
+            { noteID: req.params.noteID },
+            { TaskTaskID: req.params.id }
+        ]}})
+    
+    if(note != null)
+        res.status(200).send(note)
+    else
+        res.status(404).send(`Note with Note ID ${req.params.noteID} for Task ID ${req.params.id} not found.`)
+})
+
+
+route.delete('/:id/notes/:noteID', async (req, res) => {
+    if(isNaN(parseInt(req.params.id)) || isNaN(parseInt(req.params.noteID))){
+        res.status(500).send('ID should be a number')
+    }
+
+    const note = await Notes.findOne({where: {
+        [Op.and]: [
+            { noteID: req.params.noteID },
+            { TaskTaskID: req.params.id }
+        ]}})
+    
+    if(note != null){
+        const deletedNote = await Notes.destroy({where: {
+            [Op.and]: [
+                { noteID: req.params.noteID },
+                { TaskTaskID: req.params.id }
+            ]}})
+        if(deletedNote>0)
+            res.status(200).send('Note deleted successfully!!')
+        else
+            res.status(400).send('Error during deleting note.')
+    }       
+    else
+        res.status(404).send(`Note with Note ID ${req.params.noteID} for Task ID ${req.params.id} not found.`)
+})
+
+
+route.patch('/:id/notes/:noteID', async (req, res) => {
+    if(isNaN(parseInt(req.params.id)) || isNaN(parseInt(req.params.noteID))){
+        res.status(500).send('ID should be a number')
+    }
+
+    const note = await Notes.findOne({where: {
+        [Op.and]: [
+            { noteID: req.params.noteID },
+            { TaskTaskID: req.params.id }
+        ]}})
+    
+    if(note != null){
+        const updatedNote = await Notes.update(
+            {noteDescription: req.body.noteDescription }, {where: {
+            [Op.and]: [
+                { noteID: req.params.noteID },
+                { TaskTaskID: req.params.id }
+            ]}})
+        if(updatedNote>0)
+            res.status(200).send('Note updated successfully!!')
+        else
+            res.status(400).send('Error during updating note.')
+    }       
+    else
+        res.status(404).send(`Note with Note ID ${req.params.noteID} for Task ID ${req.params.id} not found.`)
 })
 
 
