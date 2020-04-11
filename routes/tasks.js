@@ -23,7 +23,7 @@ route.post('/', async (req, res) => {
 
 route.get('/:id', async (req, res, next) => {
     if(isNaN(parseInt(req.params.id))){
-        res.status(500).send('Task ID should be a number')
+        return res.status(400).send('Task ID should be a number')
     }
     const task = await Tasks.findByPk(req.params.id)
     if(task!=null)
@@ -35,7 +35,7 @@ route.get('/:id', async (req, res, next) => {
 
 route.get('/:id/notes', async (req, res) => {
     if(isNaN(parseInt(req.params.id))){
-        res.status(500).send('Task ID should be a number')
+        return res.status(400).send('Task ID should be a number')
     }
     const task = await Tasks.findByPk(req.params.id, {include: Notes})
     if(task!=null)
@@ -47,7 +47,7 @@ route.get('/:id/notes', async (req, res) => {
 
 route.post('/:id/notes', async (req, res) => {
     if(isNaN(parseInt(req.params.id))){
-        res.status(500).send('Task ID should be a number')
+        return res.status(400).send('Task ID should be a number')
     }
     const newNote = await Notes.create({
                       TaskTaskID: req.params.id,
@@ -59,7 +59,7 @@ route.post('/:id/notes', async (req, res) => {
 
 route.patch('/:id', async (req, res) => {
     if(isNaN(parseInt(req.params.id))){
-        res.status(500).send('Task ID should be a number')
+        return res.status(400).send('Task ID should be a number')
     }
     const task = await Tasks.findByPk(req.params.id)
     if(task != null){
@@ -88,7 +88,7 @@ route.patch('/:id', async (req, res) => {
 
 route.delete('/:id', async(req, res) => {
     if(isNaN(parseInt(req.params.id))){
-        res.status(500).send('Task ID should be a number')
+        return res.status(400).send('Task ID should be a number')
     }
     const task = await Tasks.findByPk(req.params.id)
     if(task!=null){
@@ -109,7 +109,7 @@ route.delete('/:id', async(req, res) => {
 
 route.get('/:id/notes/:noteID', async (req, res) => {
     if(isNaN(parseInt(req.params.id)) || isNaN(parseInt(req.params.noteID))){
-        res.status(500).send('ID should be a number')
+        return res.status(400).send('ID should be a number')
     }
 
     const note = await Notes.findOne({where: {
@@ -127,7 +127,7 @@ route.get('/:id/notes/:noteID', async (req, res) => {
 
 route.delete('/:id/notes/:noteID', async (req, res) => {
     if(isNaN(parseInt(req.params.id)) || isNaN(parseInt(req.params.noteID))){
-        res.status(500).send('ID should be a number')
+        return res.status(400).send('ID should be a number')
     }
 
     const note = await Notes.findOne({where: {
@@ -154,7 +154,7 @@ route.delete('/:id/notes/:noteID', async (req, res) => {
 
 route.patch('/:id/notes/:noteID', async (req, res) => {
     if(isNaN(parseInt(req.params.id)) || isNaN(parseInt(req.params.noteID))){
-        res.status(500).send('ID should be a number')
+        return res.status(400).send('ID should be a number')
     }
 
     const note = await Notes.findOne({where: {
@@ -177,6 +177,18 @@ route.patch('/:id/notes/:noteID', async (req, res) => {
     }       
     else
         res.status(404).send(`Note with Note ID ${req.params.noteID} for Task ID ${req.params.id} not found.`)
+})
+
+
+route.delete('/', async (req, res) => {
+    const deleteAllTasks = await db.Tasks.destroy({
+                        where: {},
+                        truncate: true
+                    })
+    if(deleteAllTasks>0)
+        res.status(200).send('All tasks deleted successfully!!')
+    else
+        res.status(400).send('Error during deleting!!')
 })
 
 
