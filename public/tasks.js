@@ -54,21 +54,9 @@ const getFullTask = (task) => {
     </div>`)
 }
 
-$(document).on("click", "#task-notes", (e) => {
-    var taskid = $(e.target).attr('taskid')
-    let fullTask = $('#full-task')
-    let noteCard = $('#notes-list')
-    let createNoteCard = $('#create-note')
 
-    fetchNotes((taskid), (notesFound) => {
-        noteCard.empty()
-        fullTask.empty()
-        createNoteCard.empty()
-        for(note of notesFound){
-            noteCard.append(getNotes(note))
-        }
-        createNoteCard.append(createNote())
-    })  
+$(document).on("click", "#task-notes", (e) => {
+    taskNotes(e)
 });
 
 
