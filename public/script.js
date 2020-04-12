@@ -1,21 +1,4 @@
-const fetchTasks = (done) =>{
-    $.get('/tasks', (data) => {
-        done(data)
-    })
-}
-
-const getTaskDetails = (task) =>{
-    return $(`
-        <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">${task.title}</h5>
-            <small>${task.dueDate}</small>
-        </div>
-        <p class="mb-1">${task.description}</p>
-        </a>`)
-}
-
-$(() => {
+const showTasks = () => {
     let taskList = $('#task-list')
     fetchTasks((tasks) => {
         taskList.empty()
@@ -23,4 +6,12 @@ $(() => {
             taskList.append(getTaskDetails(task))
         }
     })
+}
+
+$(() => {
+    showTasks()
+    // var tomorrow = new Date().setDate(new Date().getDate()+1)
+    // var finalDate = today().getTime() + 24 * 60 * 60 * 1000;
+    // $('#due-date').val(finalDate);
+
 })

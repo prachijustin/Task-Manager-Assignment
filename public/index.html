@@ -5,18 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="script.js"></script>
+    <script src="tasks.js"></script>
+    <script src="notes.js"></script>
     <title>Task and Notes Manager</title>
+    <style>
+        .list-group{
+            width: 450px;
+        }
+        .btn{
+            float: right;
+        }
+        #task{
+            width: 1000px;
+        }
+        .note-div{
+            border: 2px solid #46d267;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #eafaee;
+        }
+        .card-body{
+            border: 2px solid #46d267;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col"></div>
-            <h2 class="col">TASKS</h1>
-            <div class="col"></div>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="#">TASK AND NOTES MANAGER</a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#addTaskModal">Add New Task</button>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="row">
+        <div class="col-4">
+            <div class="list-group" id="task-list">
+            </div>
         </div>
-        <div class="list-group" id="task-list">
-        </div>
+        <div class="col-8">
+            <div class="row" id="full-task">              
+            </div>
+            <br>
+            <div class="row"  id="notes-list">
+            </div>  
+            <br><br>
+            <div class="row"  id="create-note">
+            </div>     
+        </div>     
     </div>
+
+    <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <label for="task-title" class="col-form-label">* Title:</label>
+            <input type="text" class="form-control" id="task-title" required>
+          </div>
+          <div class="form-group">
+            <label for="description" class="col-form-label">Description:</label>
+            <textarea class="form-control" id="description"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="due-date" class="col-form-label">Due Date:</label>
+            <input type="date" class="form-control" id="due-date"></input>
+          </div>
+          <div class="form-group">
+            <label for="status" class="col-form-label">Status:  </label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" name="status" type="checkbox" id="status" value="Incomplete" checked>
+                <label class="form-check-label" for="incompleteCheck">Incomplete</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" name="status" type="checkbox" id="status" value="Complete">
+                <label class="form-check-label" for="completeCheck">Complete</label>
+              </div>
+          </div>
+          <div class="form-group">
+            <label for="priority" class="col-form-label">Priority:</label>
+            <select class="custom-select" id="priority">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" id="add-task">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
