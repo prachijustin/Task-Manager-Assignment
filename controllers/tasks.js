@@ -14,44 +14,17 @@ exports.getAllTasks = async (req, res) => {
 }
 
 
-exports.createTask = async (req, res) => {
+exports.createTask = async (req, res, next) => {
     const titleIsValid = validation.validateTitle(req.body.title)
     try{      
         if(titleIsValid){
-            var newTask = {
+            await Tasks.create({
                 title: req.body.title,
                 description: req.body.description,
-                dueDate: req.body.dueDate,
-                status: req.body.status,
-                priority: req.body.priority
-            }
-            
-            if(req.body.dueDate){
-                if(!validation.validateDate(req.body.dueDate))
-                    return res.status(400).send('Due Date is not correct.')
-            }
-            else
-                newTask.dueDate = undefined
-
-            if(req.body.status){
-                if(!validation.validateStatus(req.body.status))
-                    return res.status(400).send('Status is not correct.')
-                else
-                    newTask.status = req.body.status.charAt(0).toUpperCase() + req.body.status.slice(1)
-            }
-            else
-                newTask.status = undefined
-
-            if(req.body.priority){
-                if(!validation.validatePriority(req.body.priority))
-                    return res.status(400).send('Priority is not correct.')
-                else
-                    newTask.priority = req.body.priority.charAt(0).toUpperCase() + req.body.priority.slice(1)
-            }
-            else
-                newTask.priority = undefined
-
-            await Tasks.create(newTask)              
+                dueDate: req.dueDate,
+                status: req.status,
+                priority: req.priority
+            })              
             res.status(201).send('Task created successfully!!')
         }
         else
@@ -86,39 +59,11 @@ exports.updateTaskById = async (req, res) => {
         const task = await Tasks.findByPk(req.params.id)
         if(task){
             if(validation.validateUpdateKey(req.body)){
-                var updatedValues = {
-                    dueDate: req.body.dueDate,
-                    status: req.body.status,
-                    priority: req.body.priority
-                }
-
-                if(req.body.dueDate){
-                    if(!validation.validateDate(req.body.dueDate))
-                        return res.status(400).send('Due Date is not correct.')
-                }
-                else
-                    updatedValues.dueDate = undefined
-    
-                if(req.body.status){
-                    if(!validation.validateStatus(req.body.status))
-                        return res.status(400).send('Status is not correct.')
-                    else
-                        updatedValues.status = req.body.status.charAt(0).toUpperCase() + req.body.status.slice(1)
-                }
-                else
-                    updatedValues.status = undefined
-    
-                if(req.body.priority){
-                    if(!validation.validatePriority(req.body.priority))
-                        return res.status(400).send('Priority is not correct.')
-                    else
-                        updatedValues.priority = req.body.priority.charAt(0).toUpperCase() + req.body.priority.slice(1)
-                }
-                else
-                    updatedValues.priority = undefined
-              
-                
-                const updatedTask = await Tasks.update(updatedValues, 
+                const updatedTask = await Tasks.update({
+                                        dueDate: req.dueDate,
+                                        status: req.status,
+                                        priority: req.priority
+                                    }, 
                                     { where: {
                                         taskID: req.params.id
                                     }});

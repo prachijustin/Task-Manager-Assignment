@@ -1,11 +1,12 @@
 const route = require('express').Router()
 const tasks = require('../controllers/tasks')
 const notes = require('../controllers/notes')
+const middleware = require('../middlewares/index').validateTask
 
 route.get('/', tasks.getAllTasks)
 
 
-route.post('/', tasks.createTask)
+route.post('/', middleware, tasks.createTask)
 
 
 route.get('/:id', tasks.getTaskById)
@@ -20,7 +21,7 @@ route.post('/:id/notes', notes.createNote)
 route.delete('/:id/notes', notes.deleteNotesByTaskId)
 
 
-route.patch('/:id', tasks.updateTaskById)
+route.patch('/:id', middleware, tasks.updateTaskById)
 
 
 route.delete('/:id', tasks.deleteTaskById)

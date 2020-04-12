@@ -13,8 +13,14 @@ app.get('/', (req, res) => {
 
 app.use('/', require('./routes/index').route)
 
-db.sync().then(() => console.log('DB Connected..'))
+var port = process.env.PORT || 6232
+
+db.sync()
+    .then(() => {
+        console.log('DB Connected..')
+        app.listen(port, () => console.log(`Listening at http://localhost:${port}`))
+    })
     .catch(() => console.log('Error during DB connection'))
     
-app.listen(6232, () => console.log('Listening at http://localhost:6232'))
+
 
