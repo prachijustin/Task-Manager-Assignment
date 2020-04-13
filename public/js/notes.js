@@ -187,7 +187,6 @@ $(document).on('click', '#btn-edit-note', (e) => {
     var taskid = $(e.target).attr('taskid')
     var noteid = $(e.target).attr('noteid')
     var desc = $(e.target).attr('desc')
-
     var editNoteModal = $('#editNoteModal')
     $("#editNoteModal #desc").val(desc);
     $("#editNoteModal #noteid").val(noteid);
@@ -200,8 +199,8 @@ $(document).on('click', '#btn-edit-note', (e) => {
 
 // Button click to edit a note(POST)
 $(document).on('click', '#edit-note-save', () => { 
-    var noteid = $('#noteid').val()
-    var taskid = $('#taskid').val()
+    var noteid = $('#editNoteModal #noteid').val()
+    var taskid = $('#editNoteModal #taskid').val()
     var description = $('#editNoteModal #desc').val()
     editNote(taskid, noteid, description)
 });
