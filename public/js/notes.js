@@ -1,22 +1,6 @@
-const fetchNotes = (id, done) =>{
-    $.get(`/tasks/${id}/notes`, (data) => {
-        done(data)
-    }).catch((obj) => {
-        alert('No notes found.')
-        let deleteAllNotesCard = $('#delete-all-notes')
-        deleteAllNotesCard.empty()
-        console.log(obj.status)
-    })
-}
-
-const createNoteAPI = (id, noteToCreate) =>{
-    $.post(`/tasks/${id}/notes`, noteToCreate, () => {
-        successMessage('Note added successfully!!')
-    })
-    return true
-}
-
-
+/*
+    -----------Utiltiy Methods for Notes-------------
+*/
 const notesUtil = (taskid) => {
     let fullTask = $('#full-task')
     let noteCard = $('#notes-list')
@@ -34,14 +18,10 @@ const notesUtil = (taskid) => {
     noteCard.empty()
     fullTask.empty()
     createNoteCard.empty()
-    deleteAllNotesCard.empty()
-
-    
+    deleteAllNotesCard.empty()  
     deleteAllNotesCard.append(deleteAllNotes(taskid))
-    //deleteAllNotesCard.append(deleteAllNotes())
     createNoteCard.append(createNote(taskid))
 }
-
 
 const taskNotes = (e) => {
     var taskid = $(e.target).attr('taskid')
@@ -49,6 +29,34 @@ const taskNotes = (e) => {
 }
 
 
+
+/*
+    -----------Methods to call APIs-------------
+*/
+
+// Method for GET /tasks/:id/notes API
+const fetchNotes = (id, done) =>{
+    $.get(`/tasks/${id}/notes`, (data) => {
+        done(data)
+    }).catch((obj) => {
+        alert('No notes found.')
+        let deleteAllNotesCard = $('#delete-all-notes')
+        deleteAllNotesCard.empty()
+        console.log(obj.status)
+    })
+}
+
+
+// Method for POST /tasks/:id/notes API
+const createNoteAPI = (id, noteToCreate) =>{
+    $.post(`/tasks/${id}/notes`, noteToCreate, () => {
+        successMessage('Note added successfully!!')
+    })
+    return true
+}
+
+
+// Method for DELETE /tasks/:taskid/notes/:noteid API
 const deleteNote = (taskid, noteid) => {
     $.ajax({
         url: `/tasks/${taskid}/notes/${noteid}`,
@@ -60,6 +68,8 @@ const deleteNote = (taskid, noteid) => {
     });
 }
 
+
+// Method for PATCH /tasks/:taskid/notes/:noteid API
 const editNote = (taskid, noteid, desc) => {
     $.ajax({
         url: `/tasks/${taskid}/notes/${noteid}`,
@@ -76,6 +86,7 @@ const editNote = (taskid, noteid, desc) => {
 }
 
 
+// Method for DELETE /tasks/:id/notes API
 const deleteAllNotesAPI = (taskid) => {
     $.ajax({
         url: `/tasks/${taskid}/notes`,
@@ -88,13 +99,12 @@ const deleteAllNotesAPI = (taskid) => {
 }
 
 
-const deleteAllNotes = (taskid) =>{
-    return (`
-    <button type="button" taskid="${taskid}" id="btn-delete-all-notes" class="btn btn-outline-danger my-2 my-sm-0">Delete All Notes</button>
-    `)
-}
 
+/*
+    ----------- Methods to return response coming from APIs to frontend-------------
+*/
 
+// Method to retrieve all notes of specific task
 const getNotes = (note) => {
     return $(`
     <div class="col-4">  
@@ -110,7 +120,7 @@ const getNotes = (note) => {
     `)
 }
 
-
+// Method to create note for specific task
 const createNote = (taskid) => {
     return $(`
     <div class="note-div">
@@ -120,6 +130,7 @@ const createNote = (taskid) => {
             <div class="form-group">
                 <label for="desc">* Note Description: </label>
                 <textarea class="form-control" class="form-control" rows="4" cols="200" id="desc" style="width:500px;" required></textarea>
+                <p id="req" style="color: red; display:none; font-size: 12px;">Description is required</p>
             </div>         
         </div>
         <button type="button" id="note-btn" taskid="${taskid}" class="btn btn-success">ADD NOTE</button>
@@ -127,19 +138,43 @@ const createNote = (taskid) => {
 }
 
 
+// Method to delete all notes
+const deleteAllNotes = (taskid) =>{
+    return (`
+    <button type="button" taskid="${taskid}" id="btn-delete-all-notes" class="btn btn-outline-danger my-2 my-sm-0">Delete All Notes</button>
+    `)
+}
+
+
+
+/*
+    ----------- Methods handling button clicks-------------
+*/
+
+// Button click to create a note
 $(document).on('click', '#note-btn', (e) => { 
     var taskid = $(e.target).attr('taskid')
-    var noteToCreate = {
-        noteDescription: $('#desc').val(),
-        TaskTaskID: taskid
+    if($('#desc').val() == ''){
+        $('#desc').css({
+            'border' : '1px solid red'
+        })
+        $('#req').css({
+            'display' : 'block'
+        })
     }
-    if(createNoteAPI(taskid, noteToCreate)){
-        taskNotes(e)
-    }
+    else{
+        var noteToCreate = {
+            noteDescription: $('#desc').val(),
+            TaskTaskID: taskid
+        }       
+        if(createNoteAPI(taskid, noteToCreate)){
+            taskNotes(e)
+        }
+    }  
 });
 
 
-
+// Button click to delete a specific note
 $(document).on('click', '#btn-delete-note', (e) => { 
     var taskid = $(e.target).attr('taskid')
     var noteid = $(e.target).attr('noteid')
@@ -147,6 +182,7 @@ $(document).on('click', '#btn-delete-note', (e) => {
 });
 
 
+// Button click to edit a note(GET)
 $(document).on('click', '#btn-edit-note', (e) => { 
     var taskid = $(e.target).attr('taskid')
     var noteid = $(e.target).attr('noteid')
@@ -162,16 +198,16 @@ $(document).on('click', '#btn-edit-note', (e) => {
 });
 
 
+// Button click to edit a note(POST)
 $(document).on('click', '#edit-note-save', () => { 
     var noteid = $('#noteid').val()
     var taskid = $('#taskid').val()
     var description = $('#editNoteModal #desc').val()
-
-    //console.log(description)
     editNote(taskid, noteid, description)
 });
 
 
+// Button click to delete all notes
 $(document).on('click', '#btn-delete-all-notes', (e) => { 
     var taskid = $(e.target).attr('taskid')
     deleteAllNotesAPI(taskid)

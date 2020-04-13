@@ -1,3 +1,4 @@
+// Fetching all tasks and showing when site loads
 const showTasks = () => {
     let taskList = $('#task-list')
     fetchTasks((tasks) => {
@@ -8,6 +9,8 @@ const showTasks = () => {
     })
 }
 
+
+// Method called by default when site loads
 $(() => {
     showTasks()
     var tomorrow = new Date();
@@ -20,3 +23,9 @@ $(() => {
         $('.form-check-input').not(this).prop('checked', false);  
     });
 })
+
+
+// Utiltity function
+const successMessage = (message) => {
+    alert(message)
+}

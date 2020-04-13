@@ -3,55 +3,15 @@ const Tasks = require('../models/db').Tasks
 const { Op } = require('sequelize')
 const validation = require('../validations/index')
 
-
-exports.getAllNotes = async (req, res) => {
-    try{
-        const notes = await Notes.findAll()
-        if(notes)
-            res.status(200).send(notes)
-        else
-            res.status(404).send('No notes found')
-    }catch{
-        return res.status(400).send('Error during retrieval')
-    }    
-}
-
-
-exports.getNoteById = async (req, res) => {
-    if(validation.validateId(req.params.id)){
-        return res.status(400).send('Note ID should be a number')
-    }
-    try{
-        const note = await Notes.findByPk(req.params.id)
-        if(note)
-            res.status(200).send(note)
-        else
-            res.status(404).send(`Note with Note ID ${req.params.id} not found.`)
-    }catch{
-        return res.status(500).send('Something went wrong. Please try again later.')
-    }   
-}
-
-
-exports.deleteAllNotes = async (req, res) => {
-    try{
-        await db.Notes.destroy({
-            where: {},
-            truncate: true
-        })
-        res.status(200).send('All notes deleted successfully!!')
-    }catch{
-        return res.status(500).send('Something went wrong. Please try again later.')
-    }
-}
-
-
+// Method to retrieve all notes of task with taskid
 exports.getNoteByTaskId = async (req, res) => {
     if(validation.validateId(req.params.id)){
         return res.status(400).send('Task ID should be a number')
     }
     try{
         const task = await Tasks.findByPk(req.params.id, {include: Notes})
+
+        // If tasks exists, then only search for notes
         if(task){
             if(task.Notes.length >0)
                 res.status(200).send(task.Notes)
@@ -65,12 +25,13 @@ exports.getNoteByTaskId = async (req, res) => {
     }   
 }
 
-
+// Methdod to create a note for a task with taskid
 exports.createNote = async (req, res) => {
     if(validation.validateId(req.params.id)){
         return res.status(400).send('Task ID should be a number')
     }
     try{
+        // VAlidate note description before creating note
         const descIsValid = validation.validateTitle(req.body.noteDescription)       
         if(descIsValid){
             await Notes.create({
@@ -86,7 +47,7 @@ exports.createNote = async (req, res) => {
     }    
 }
 
-
+// Delete all notes for a specific task
 exports.deleteNotesByTaskId = async (req, res) => {
     if(validation.validateId(req.params.id)){
         return res.status(400).send('Task ID should be a number')
@@ -106,12 +67,13 @@ exports.deleteNotesByTaskId = async (req, res) => {
     }   
 }
 
-
+// Method to retrieve a specific note of specific task
 exports.getNoteByIdByTaskId = async (req, res) => {
     if(validation.validateId(req.params.taskID) || validation.validateId(req.params.id)){
         return res.status(400).send('ID should be a number')
     }
     try{
+        // Condition given to match for taskid and noteid given
         const condition =  {
             [Op.and]: [
                 { noteID: req.params.id },
@@ -128,7 +90,7 @@ exports.getNoteByIdByTaskId = async (req, res) => {
     }    
 }
 
-
+// Method to delete a specific note of specific task
 exports.deleteNoteByIdByTaskId = async (req, res) => {
     if(validation.validateId(req.params.taskID) || validation.validateId(req.params.id)){
         return res.status(400).send('ID should be a number')
@@ -156,7 +118,7 @@ exports.deleteNoteByIdByTaskId = async (req, res) => {
     }     
 }
 
-
+// Method to update a specific note of specific task
 exports.updateNoteByIdByTaskId = async (req, res) => {
     if(validation.validateId(req.params.taskID) || validation.validateId(req.params.id)){
         return res.status(400).send('ID should be a number')

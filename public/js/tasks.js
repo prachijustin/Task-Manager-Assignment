@@ -1,13 +1,16 @@
+/*
+    -----------Methods to call APIs-------------
+*/
+
+// Method for GET /tasks API
 const fetchTasks = (done) =>{
     $.get('/tasks', (data) => {
         done(data)
     })
 }
 
-const successMessage = (message) => {
-    alert(message)
-}
 
+// Method for POST /tasks API
 const createTask = (taskToCreate) =>{
     $.post('/tasks', taskToCreate, () => {
         $('#addTaskModal').modal('toggle')
@@ -32,12 +35,16 @@ const createTask = (taskToCreate) =>{
     })
 }
 
+
+// Method for Get /tasks/:id API
 const fetchTaskById = (taskid, done) => {
     $.get(`/tasks/${taskid}`, (task) => {
         done(task)
     })
 }
 
+
+// Method for DELETE /tasks/:id API
 const deleteTask = (taskid) => {
     $.ajax({
         url: `/tasks/${taskid}`,
@@ -52,6 +59,7 @@ const deleteTask = (taskid) => {
 }
 
 
+// Method for PATCH /tasks/:id API
 const editTask = (taskid, dueDate, checked, priority) => {
     $.ajax({
         url: `/tasks/${taskid}`,
@@ -74,7 +82,7 @@ const editTask = (taskid, dueDate, checked, priority) => {
 }
 
 
-
+// Method for DELETE /tasks API
 const deleteAllTasks = () => {
     $.ajax({
         url: '/tasks',
@@ -87,6 +95,12 @@ const deleteAllTasks = () => {
 }
 
 
+
+/*
+    ----------- Methods to return response coming from APIs to frontend-------------
+*/
+
+// Method for retrieving all tasks to frontend as a list of tasks
 const getTaskDetails = (task) =>{
     return $(`
         <a href="#" class="list-group-item list-group-item-action">
@@ -101,6 +115,8 @@ const getTaskDetails = (task) =>{
         </a>`)
 }
 
+
+// Method to get all the details of a specific task
 const getFullTask = (task) => {
     return $(`
     <div class="card">
@@ -124,6 +140,7 @@ const getFullTask = (task) => {
 }
 
 
+// Method to edit the task
 const editTaskCard = (task) => {
     return $(`
     <div class="note-div">
@@ -158,11 +175,19 @@ const editTaskCard = (task) => {
     </div>`)
 }
 
+
+
+/*
+    ----------- Methods handling button clicks-------------
+*/
+
+// Button click to retrieve all notes of specific task
 $(document).on("click", "#task-notes", (e) => {
     taskNotes(e)
 });
 
 
+// Button click to get task details
 $(document).on("click", "#task-details", (e) => {
     var taskid = $(e.target).attr('taskid')
     let noteCard = $('#notes-list')
@@ -182,6 +207,7 @@ $(document).on("click", "#task-details", (e) => {
 });
 
 
+// Button click to add a new task
 $(document).on('click', '#add-task', function(){ 
     $('#addTaskModal #incompleteCheck').prop('checked', true)
     if($('#task-title').val() == ''){
@@ -205,7 +231,7 @@ $(document).on('click', '#add-task', function(){
 });
 
 
-
+// Button click to delete a task
 $(document).on("click", "#btn-delete-task", (e) => {
     var taskid = $(e.target).attr('taskid')
     console.log(taskid)
@@ -214,7 +240,7 @@ $(document).on("click", "#btn-delete-task", (e) => {
 });
 
 
-
+// Button click to edit a task (GET)
 $(document).on("click", "#btn-edit-task", (e) => {
     var taskid = $(e.target).attr('taskid')
     $("#editTaskModal #taskid").val(taskid)
@@ -240,6 +266,7 @@ $(document).on("click", "#btn-edit-task", (e) => {
 });
 
 
+// Button click to edit a task (POST)
 $(document).on("click", "#edit-task-save-btn", () => {
     var taskid = $('#editTaskModal #taskid').val()
     var dueDate = $('#editTaskModal #due-date').val()
@@ -253,12 +280,19 @@ $(document).on("click", "#edit-task-save-btn", () => {
 });
 
 
-
+// Button click to delete all tasks
 $(document).on("click", "#delete-all-tasks-btn", () => {
     deleteAllTasks()
 });
 
 
+
+/*
+    ----------- Methods for handling sorting-------------
+    Sorting tasks by DueDate, Priority and Status
+*/
+
+// -----Handling sort by DueDate--------------
 const compareDueDate = (task1, task2) => {
     if (task1.dueDate < task2.dueDate) return -1
     if (task1.dueDate > task2.dueDate) return 1
@@ -275,8 +309,10 @@ $(document).on("click", "#sort-date-btn", () => {
         }
     })
 });
+//----------------------------------------
 
 
+// -----Handling sort by Priority--------------
 const comparePriority = (task1, task2) => {
     var priorityOrder = {'High': 1, 'Medium': 2, 'Low': 3}
     return (priorityOrder[task1.priority] - priorityOrder[task2.priority])
@@ -292,8 +328,10 @@ $(document).on("click", "#sort-priority-btn", () => {
         }
     })
 });
+//----------------------------------------
 
 
+// -----Handling sort by Status--------------
 const compareStatus = (task1, task2) => {
     var statusOrder = {'Incomplete': 1, 'Complete': 2}
     return (statusOrder[task1.status] - statusOrder[task2.status])
@@ -310,8 +348,10 @@ $(document).on("click", "#sort-status-btn", () => {
         }
     })
 });
+//----------------------------------------
 
 
+// ----------Default ---------------------
 $(document).on("click", "#all-btn", () => {
     let taskList = $('#task-list')
     fetchTasks((tasks) => {
@@ -321,3 +361,4 @@ $(document).on("click", "#all-btn", () => {
         }
     })
 })
+//---------------------------------------

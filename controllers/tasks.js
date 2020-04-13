@@ -1,6 +1,7 @@
 const Tasks = require('../models/db').Tasks
 const validation = require('../validations/index')
 
+// Method to get all the tasks
 exports.getAllTasks = async (req, res) => {
     try{
         const tasks = await Tasks.findAll()
@@ -13,8 +14,10 @@ exports.getAllTasks = async (req, res) => {
     }   
 }
 
-
+// Method to create a new task
 exports.createTask = async (req, res, next) => {
+
+    // Validating task title before creating new task
     const titleIsValid = validation.validateTitle(req.body.title)
     try{      
         if(titleIsValid){
@@ -34,12 +37,15 @@ exports.createTask = async (req, res, next) => {
     }     
 }
 
-
+// Method to retrieve task by id
 exports.getTaskById = async (req, res) => {
+
+    // Validating id if it's a number or not
     if(validation.validateId(req.params.id)){
         return res.status(400).send('Task ID should be a number')
     }
     try{
+        // Finding task by it's id i.e., Primary Key
         const task = await Tasks.findByPk(req.params.id)
         if(task)
             res.status(200).send(task)
@@ -50,13 +56,15 @@ exports.getTaskById = async (req, res) => {
     }
 }
 
-
+// Method to update a task by id
 exports.updateTaskById = async (req, res) => {
     if(validation.validateId(req.params.id)){
         return res.status(400).send('Task ID should be a number')
     }
     try{
         const task = await Tasks.findByPk(req.params.id)
+
+        // If task of this id exists, then only update it
         if(task){
             if(validation.validateUpdateKey(req.body)){
                 const updatedTask = await Tasks.update({
@@ -82,7 +90,7 @@ exports.updateTaskById = async (req, res) => {
     }
 }
 
-
+// Method to delete a task by id
 exports.deleteTaskById = async(req, res) => {
     if(validation.validateId(req.params.id)){
         return res.status(400).send('Task ID should be a number')
@@ -107,7 +115,7 @@ exports.deleteTaskById = async(req, res) => {
     }   
 }
 
-
+// Method to delete all tasks
 exports.deleteAllTasks = async (req, res) => {
     try{
         await db.Tasks.destroy({

@@ -1,0 +1,23 @@
+.list-group{
+    width: 450px;
+}
+.btn{
+    float: right;
+}
+#task{
+    width: 1000px;
+}
+.note-div{
+    border: 2px solid #46d267;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #eafaee;
+}
+.card{
+  border: 1px solid #46d267;
+}
+.card-body{
+    border: 2px solid #46d267;
+    padding: 20px;
+    border-radius: 10px;
+}
