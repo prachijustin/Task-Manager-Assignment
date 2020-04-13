@@ -27,6 +27,9 @@
             border-radius: 10px;
             background-color: #eafaee;
         }
+        .card{
+          border: 1px solid #46d267;
+        }
         .card-body{
             border: 2px solid #46d267;
             padding: 20px;
@@ -36,12 +39,16 @@
 </head>
 <body>
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">TASK AND NOTES MANAGER</a>
+        <a class="navbar-brand" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: 30px;">TASK AND NOTES MANAGER</a>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#addTaskModal">Add New Task</button>
-            </li>
+              <button type="button" class="btn btn-outline-danger my-2 my-sm-0" data-toggle="modal" data-target="#deleteAllTaskModal" style="margin: 10px;">Delete All Tasks</button>
+              <button type="button" class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#addTaskModal" style="margin: 10px;">Add New Task</button>
+              </li>
         </ul>
+        <ul class="navbar-nav mr-auto">
+          
+      </ul>
     </nav>
     
     <div class="row">
@@ -50,9 +57,13 @@
             </div>
         </div>
         <div class="col-8">
+          <br>
             <div class="row" id="full-task">              
             </div>
             <br>
+            <div class="row"  id="delete-all-notes" style="float: right; padding-right: 50px;">
+            </div> 
+            <br><br>
             <div class="row"  id="notes-list">
             </div>  
             <br><br>
@@ -61,24 +72,69 @@
         </div>     
     </div>
 
-    <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-            <label for="task-title" class="col-form-label">* Title:</label>
-            <input type="text" class="form-control" id="task-title" required>
-          </div>
+  <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
           <div class="form-group">
-            <label for="description" class="col-form-label">Description:</label>
-            <textarea class="form-control" id="description"></textarea>
-          </div>
+              <label for="task-title" class="col-form-label">* Title:</label>
+              <input type="text" class="form-control" id="task-title">
+              <p id="req" style="color: red; display:none; font-size: 12px;">Title is required</p>
+            </div>
+            <div class="form-group">
+              <label for="description" class="col-form-label">Description:</label>
+              <textarea class="form-control" id="description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="due-date" class="col-form-label">Due Date:</label>
+              <input type="date" class="form-control" id="due-date"></input>
+            </div>
+            <div class="form-group">
+              <label for="status" class="col-form-label">Status:  </label>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" name="status" type="checkbox" id="status" value="Incomplete" checked>
+                  <label class="form-check-label" for="incompleteCheck">Incomplete</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" name="status" type="checkbox" id="status" value="Complete">
+                  <label class="form-check-label" for="completeCheck">Complete</label>
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="priority" class="col-form-label">Priority:</label>
+              <select class="custom-select" id="priority">
+                  <option value="Low">Low</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="High">High</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" id="add-task">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
           <div class="form-group">
             <label for="due-date" class="col-form-label">Due Date:</label>
             <input type="date" class="form-control" id="due-date"></input>
@@ -86,11 +142,11 @@
           <div class="form-group">
             <label for="status" class="col-form-label">Status:  </label>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" name="status" type="checkbox" id="status" value="Incomplete" checked>
+                <input class="form-check-input" name="status" type="checkbox" id="incompleteCheck" value="Incomplete">
                 <label class="form-check-label" for="incompleteCheck">Incomplete</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" name="status" type="checkbox" id="status" value="Complete">
+                <input class="form-check-input" name="status" type="checkbox" id="completeCheck" value="Complete">
                 <label class="form-check-label" for="completeCheck">Complete</label>
               </div>
           </div>
@@ -98,17 +154,69 @@
             <label for="priority" class="col-form-label">Priority:</label>
             <select class="custom-select" id="priority">
                 <option value="Low">Low</option>
-                <option value="Medium" selected>Medium</option>
+                <option value="Medium">Medium</option>
                 <option value="High">High</option>
               </select>
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success" id="add-task">Add</button>
+        </div>
+        <input id="taskid" type="hidden"></input>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" id="edit-task-save-btn">Save</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+
+  <div class="modal fade" id="editNoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Note</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="desc" class="col-form-label">Description:</label>
+              <textarea class="form-control" id="desc"></textarea>
+            </div>
+        </div>
+        <input id="taskid" type="hidden"></input>
+        <input id="noteid" type="hidden"></input>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" id="edit-note-save">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="modal fade" id="deleteAllTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete All Tasks?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <p>You sure you want to delete all tasks?</p>
+            </div>
+        </div>
+        <input id="taskid" type="hidden"></input>
+        <input id="noteid" type="hidden"></input>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-danger" id="delete-all-tasks-btn">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

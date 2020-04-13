@@ -10,8 +10,9 @@ const showTasks = () => {
 
 $(() => {
     showTasks()
-    // var tomorrow = new Date().setDate(new Date().getDate()+1)
-    // var finalDate = today().getTime() + 24 * 60 * 60 * 1000;
-    // $('#due-date').val(finalDate);
+    var tomorrow = new Date();
+    tomorrow.setDate(new Date().getDate()+1);
 
+    var finalDate = tomorrow.toISOString().split('T')[0]
+    $('#addTaskModal #due-date').val(finalDate);
 })
