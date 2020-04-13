@@ -53,8 +53,12 @@
     
     <div class="row">
         <div class="col-4">
-            <div class="list-group" id="task-list">
-            </div>
+          <button type="button" class="btn btn-secondary" id="all-btn" style="float: left; margin: 5px; font-size: x-small;">All</button>
+          <button type="button" class="btn btn-secondary" id="sort-date-btn" style="float: left; margin: 5px; font-size: x-small;">Sort by Due Date</button>
+          <button type="button" class="btn btn-secondary" id="sort-priority-btn" style="float: left; margin: 5px; font-size: x-small;">Sort by Priority</button>
+          <button type="button" class="btn btn-secondary" id="sort-status-btn" style="float: left; margin: 5px; font-size: x-small;">Sort by Status</button>
+        <div class="list-group" id="task-list">
+        </div>
         </div>
         <div class="col-8">
           <br>
@@ -98,11 +102,11 @@
             <div class="form-group">
               <label for="status" class="col-form-label">Status:  </label>
               <div class="form-check form-check-inline">
-                  <input class="form-check-input" name="status" type="checkbox" id="status" value="Incomplete" checked>
+                  <input class="form-check-input" name="incompleteCheck" type="checkbox" id="incompleteCheck" value="Incomplete" checked>
                   <label class="form-check-label" for="incompleteCheck">Incomplete</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" name="status" type="checkbox" id="status" value="Complete">
+                  <input class="form-check-input" name="completeCheck" type="checkbox" id="completeCheck" value="Complete">
                   <label class="form-check-label" for="completeCheck">Complete</label>
                 </div>
             </div>

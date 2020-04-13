@@ -26,6 +26,8 @@ const createTask = (taskToCreate) =>{
 
         var finalDate = tomorrow.toISOString().split('T')[0]
         $('#addTaskModal #due-date').val(finalDate);
+
+        $('#addTaskModal #incompleteCheck').prop('checked', true)
         showTasks()
     })
 }
@@ -94,7 +96,8 @@ const getTaskDetails = (task) =>{
         </div>
         <button type="button" class="btn btn-success" taskid="${task.taskID}" id="task-notes" style="margin: 5px;">Notes</button>
         <button type="button" class="btn btn-light" taskid="${task.taskID}" id="task-details" style="margin: 5px;">More</button>       
-        <p class="mb-1" >Priority: <b> ${task.priority} </b></p>
+        <p class="mb-1" style="font-size: smaller;">Priority: <b> ${task.priority} </b></p>
+        <p class="mb-1" style="font-size: smaller;">Status: <b> ${task.status} </b></p>
         </a>`)
 }
 
@@ -180,6 +183,7 @@ $(document).on("click", "#task-details", (e) => {
 
 
 $(document).on('click', '#add-task', function(){ 
+    $('#addTaskModal #incompleteCheck').prop('checked', true)
     if($('#task-title').val() == ''){
         $('#task-title').css({
             'border' : '1px solid red'
@@ -188,7 +192,7 @@ $(document).on('click', '#add-task', function(){
             'display' : 'block'
         })
     }
-    else{
+    else{      
         var taskToCreate = {
             title: $('#task-title').val(),
             description: $('#description').val(),
@@ -254,3 +258,66 @@ $(document).on("click", "#delete-all-tasks-btn", () => {
     deleteAllTasks()
 });
 
+
+const compareDueDate = (task1, task2) => {
+    if (task1.dueDate < task2.dueDate) return -1
+    if (task1.dueDate > task2.dueDate) return 1
+    return 0
+}
+  
+$(document).on("click", "#sort-date-btn", () => {
+    let taskList = $('#task-list')
+    fetchTasks((tasks) => {
+        tasks.sort(compareDueDate)
+        taskList.empty()
+        for(task of tasks){
+            taskList.append(getTaskDetails(task))
+        }
+    })
+});
+
+
+const comparePriority = (task1, task2) => {
+    var priorityOrder = {'High': 1, 'Medium': 2, 'Low': 3}
+    return (priorityOrder[task1.priority] - priorityOrder[task2.priority])
+}
+
+$(document).on("click", "#sort-priority-btn", () => {
+    let taskList = $('#task-list')
+    fetchTasks((tasks) => {
+        tasks.sort(comparePriority)
+        taskList.empty()
+        for(task of tasks){
+            taskList.append(getTaskDetails(task))
+        }
+    })
+});
+
+
+const compareStatus = (task1, task2) => {
+    var statusOrder = {'Incomplete': 1, 'Complete': 2}
+    return (statusOrder[task1.status] - statusOrder[task2.status])
+}
+
+$(document).on("click", "#sort-status-btn", () => {
+    let taskList = $('#task-list')
+    fetchTasks((tasks) => {       
+        tasks.sort(compareStatus)      
+        taskList.empty()
+        for(task of tasks){
+            console.log(task.status)
+            taskList.append(getTaskDetails(task))
+        }
+    })
+});
+
+
+$(document).on("click", "#all-btn", () => {
+    let taskList = $('#task-list')
+    fetchTasks((tasks) => {
+        taskList.empty()
+        for(task of tasks){
+            taskList.append(getTaskDetails(task))
+        }
+    })
+})
