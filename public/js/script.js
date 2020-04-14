@@ -22,6 +22,8 @@ $(() => {
     $('.form-check-input').on('change', function() {
         $('.form-check-input').not(this).prop('checked', false);  
     });
+
+    $('#addTaskModal #incompleteCheck').prop('checked', true)
 })
 
 

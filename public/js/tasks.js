@@ -72,6 +72,7 @@ const editTask = (taskid, dueDate, checked, priority) => {
         success: () =>{
             alert('Task edited successfully.')
             $('#editTaskModal').modal('toggle')
+            showTasks()
             let fullTask = $('#full-task')
             fullTask.empty()
             fetchTaskById((taskid), (taskFound) => {
@@ -218,12 +219,27 @@ $(document).on('click', '#add-task', function(){
             'display' : 'block'
         })
     }
-    else{      
+    else{     
+        var checked = ''
+        if($('#addTaskModal #completeCheck:checked').length >0)
+            checked = $('#addTaskModal #completeCheck').val()
+        else
+            checked = $('#addTaskModal #incompleteCheck').val()
+
+        if(checked == 'Incomplete'){
+            $('#addTaskModal #incompleteCheck').prop('checked', true)
+            $('#addTaskModal #completeCheck').prop('checked', false)
+        }
+        else{
+            $('#addTaskModal #incompleteCheck').prop('checked', false)
+            $('#addTaskModal #completeCheck').prop('checked', true)
+        }
+    
         var taskToCreate = {
             title: $('#task-title').val(),
             description: $('#description').val(),
             dueDate: $('#due-date').val(),
-            status: $('#status').val(),
+            status: checked,
             priority: $('#priority').val()
         }
         createTask(taskToCreate)

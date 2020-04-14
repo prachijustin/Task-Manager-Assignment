@@ -15,7 +15,6 @@ const notesUtil = (taskid) => {
             noteCard.append(getNotes(note))
         }       
     })
-    noteCard.empty()
     fullTask.empty()
     createNoteCard.empty()
     deleteAllNotesCard.empty()  
