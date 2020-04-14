@@ -11,7 +11,7 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 
 app.use('/', require('./routes/index').route)
 
-var port = process.env.PORT || 6232
+var port = process.env.PORT || 3000
 
 db.sync()
     .then(() => {
