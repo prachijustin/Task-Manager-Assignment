@@ -40,6 +40,8 @@ const createTask = (taskToCreate) =>{
 const fetchTaskById = (taskid, done) => {
     $.get(`/tasks/${taskid}`, (task) => {
         done(task)
+        let taskTitleUI = $('#task-title')
+        taskTitleUI.empty()
     })
 }
 
@@ -53,6 +55,8 @@ const deleteTask = (taskid) => {
             alert('Task deleted successfully.')
             let fullTask = $('#full-task')
             fullTask.empty()
+            let taskTitleUI = $('#task-title')
+            taskTitleUI.empty()
             showTasks()
         }
     });
@@ -75,6 +79,8 @@ const editTask = (taskid, dueDate, checked, priority) => {
             showTasks()
             let fullTask = $('#full-task')
             fullTask.empty()
+            let taskTitleUI = $('#task-title')
+            taskTitleUI.empty()
             fetchTaskById((taskid), (taskFound) => {
                 fullTask.append(getFullTask(taskFound))
             })
@@ -91,6 +97,8 @@ const deleteAllTasks = () => {
         success: () =>{
             alert('All tasks deleted successfully.')
             showTasks()
+            let taskTitleUI = $('#task-title')
+            taskTitleUI.empty()
         }
     });
 }
@@ -109,7 +117,7 @@ const getTaskDetails = (task) =>{
             <h5 class="mb-1" style="font-family: cursive; font-weight: 600; font-size: 20px;">${task.title}</h5>
             <small>Due Date: ${task.dueDate}</small>
         </div>
-        <button type="button" class="btn btn-success" taskid="${task.taskID}" id="task-notes" style="margin: 5px;">Notes</button>
+        <button type="button" class="btn btn-success" taskid="${task.taskID}" tasktitle="${task.title}" id="task-notes" style="margin: 5px;">Notes</button>
         <button type="button" class="btn btn-light" taskid="${task.taskID}" id="task-details" style="margin: 5px;">More</button>       
         <p class="mb-1" style="font-size: smaller;">Priority: <b> ${task.priority} </b></p>
         <p class="mb-1" style="font-size: smaller;">Status: <b> ${task.status} </b></p>
@@ -122,9 +130,9 @@ const getFullTask = (task) => {
     return $(`
     <div class="card">
         <div class="card-header">
-            <b>TASK ID :</b> ${task.taskID}
+        <h3><b>TASK:</b> <span style="font-family: cursive;"> ${task.taskID} </span></h3>
             <br>
-            <b>TASK :</b>  ${task.title}
+            <h3><b>TASK:</b> <span style="font-family: cursive;"> ${task.title} </span></h3>
         </div>
         <div class="card-body" id="task">
             <p class="card-text"> <b>Description:</b> ${task.description}</p>
