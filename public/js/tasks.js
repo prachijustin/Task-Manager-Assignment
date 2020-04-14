@@ -17,7 +17,7 @@ const createTask = (taskToCreate) =>{
         successMessage('Task created successfully!!')
         $('#addTaskModal').find("input,textarea").val('')
 
-        $('#task-title').css({
+        $('#task-title-box').css({
             'border' : '1px solid #ced4da'
         })
         $('#req').css({
@@ -219,8 +219,8 @@ $(document).on("click", "#task-details", (e) => {
 // Button click to add a new task
 $(document).on('click', '#add-task', function(){ 
     $('#addTaskModal #incompleteCheck').prop('checked', true)
-    if($('#task-title').val() == ''){
-        $('#task-title').css({
+    if($('#task-title-box').val() == ''){
+        $('#task-title-box').css({
             'border' : '1px solid red'
         })
         $('#req').css({
@@ -244,7 +244,7 @@ $(document).on('click', '#add-task', function(){
         }
     
         var taskToCreate = {
-            title: $('#task-title').val(),
+            title: $('#task-title-box').val(),
             description: $('#description').val(),
             dueDate: $('#due-date').val(),
             status: checked,
