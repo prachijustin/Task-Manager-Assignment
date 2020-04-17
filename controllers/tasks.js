@@ -87,7 +87,7 @@ exports.deleteTaskById = async(req, res) => {
 // Method to delete all tasks
 exports.deleteAllTasks = async (req, res) => {
     try{
-        await db.Tasks.destroy({
+        await Tasks.destroy({
             where: {},
             truncate: true
         })
