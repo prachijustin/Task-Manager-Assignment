@@ -16,10 +16,13 @@ Open terminal and type the following command to clone the repository:
 ## Run
 Open terminal and type the following command:
 ```
-    npx nodemon app.js
+    npm start
 ```
 It should print the following..
 ```
     DB Connected..
     Listening at URL 
 ```
+
+## Demo on Heroku
+https://task-notes-manager.herokuapp.com/
